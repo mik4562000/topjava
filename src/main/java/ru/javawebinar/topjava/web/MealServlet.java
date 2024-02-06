@@ -22,9 +22,10 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<MealTo> mealToList = MealsUtil.filteredByStreams(
                 MealsUtil.getInitMealList(),
-                LocalTime.of(0, 0), LocalTime.of(23, 59),
+                LocalTime.MIN, LocalTime.MAX,
                 MealsUtil.CALORIES_PER_DAY);
         request.setAttribute("meals", mealToList);
+        log.debug("forward to meals");
         request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 }

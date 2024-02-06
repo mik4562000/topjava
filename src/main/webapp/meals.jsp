@@ -17,13 +17,13 @@
         <th>Калории</th>
     </tr>
     </thead>
-    <c:forEach var="item" items="${meals}">
-        <tr ${item.isExcess() ? 'style="color: red;"' : ''}>
-            <fmt:parseDate  value="${item.getDateTime()}"  pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="date" />
+    <c:forEach var="meal" items="${meals}">
+        <tr ${meal.excess ? 'style="color: red;"' : 'style="color: green;"'}>
+            <fmt:parseDate  value="${meal.dateTime}"  pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="date" />
             <fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm" var="formattedDateTime" />
             <td>${formattedDateTime}</td>
-            <td>${item.getDescription()}</td>
-            <td>${item.getCalories()}</td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
         </tr>
     </c:forEach>
 </table>
