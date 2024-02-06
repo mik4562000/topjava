@@ -15,6 +15,7 @@
         <th>Дата/Время</th>
         <th>Описание</th>
         <th>Калории</th>
+        <th colspan=2>Action</th>
     </tr>
     </thead>
     <c:forEach var="meal" items="${meals}">
@@ -24,8 +25,11 @@
             <td>${formattedDateTime}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
+            <td><a href="meals?action=edit&mealId=<c:out value="${meal.id}"/>">Update</a></td>
+            <td><a href="meals?action=delete&mealId=<c:out value="${meal.id}"/>">Delete</a></td>
         </tr>
     </c:forEach>
 </table>
+<p><a href="meal?action=insert">Add Meal</a></p>
 </body>
 </html>
