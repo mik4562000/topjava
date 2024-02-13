@@ -57,7 +57,7 @@ public class InMemoryUserRepository implements UserRepository {
         if (email.isEmpty()) return null;
 
         return repository.values().stream()
-                .filter(user -> email.equals(user.getEmail()))
+                .filter(user -> email.equalsIgnoreCase(user.getEmail()))
                 .findFirst().orElse(null);
     }
 }

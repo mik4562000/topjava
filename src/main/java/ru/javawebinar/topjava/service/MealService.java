@@ -44,10 +44,10 @@ public class MealService {
     }
 
     public List<MealTo> getFilteredMealsByDateRange(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, int authUserCaloriesPerDay) {
-        LocalDate startDateNotNull = startDate == null || startDate.equals("") ? LocalDate.MIN : startDate;
-        LocalDate endDateNotNull = endDate == null || endDate.equals("") ? LocalDate.MAX : endDate;
-        LocalTime startTimeNotNull = startTime == null || startTime.equals("") ? LocalTime.MIN : startTime;
-        LocalTime endTimeNotNull = endTime == null || endTime.equals("") ? LocalTime.MAX : endTime;
-        return MealsUtil.getTos(repository.getFilteredMealsByDateRange(userId, startDateNotNull, endDateNotNull, startTimeNotNull, endTimeNotNull), authUserCaloriesPerDay);
+        LocalDate startDateNotNull = startDate == null ? LocalDate.MIN : startDate;
+        LocalDate endDateNotNull = endDate == null ? LocalDate.MAX : endDate;
+        LocalTime startTimeNotNull = startTime == null ? LocalTime.MIN : startTime;
+        LocalTime endTimeNotNull = endTime == null ? LocalTime.MAX : endTime;
+        return MealsUtil.getFilteredTos(repository.getFilteredMealsByDateRange(userId, startDateNotNull, endDateNotNull), authUserCaloriesPerDay, startTimeNotNull, endTimeNotNull);
     }
 }

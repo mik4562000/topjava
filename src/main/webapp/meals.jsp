@@ -23,16 +23,16 @@
     <form method="get" action="meals">
         <div>
             <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" name="startDate">
+            <input type="date" id="startDate" name="startDate" value="<%= request.getParameter("startDate") %>">
 
             <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate">
+            <input type="date" id="endDate" name="endDate" value="<%= request.getParameter("endDate") %>">
 
             <label for="startTime">Start Time:</label>
-            <input type="time" id="startTime" name="startTime">
+            <input type="time" id="startTime" name="startTime" value="<%= request.getParameter("startTime") %>">
 
             <label for="endTime">End Time:</label>
-            <input type="time" id="endTime" name="endTime">
+            <input type="time" id="endTime" name="endTime" value="<%= request.getParameter("endTime") %>">
 
             <button type="submit">Apply Filter</button>
         </div>

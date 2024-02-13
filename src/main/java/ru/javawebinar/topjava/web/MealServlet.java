@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.StringUtils;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
@@ -45,7 +46,8 @@ public class MealServlet extends HttpServlet {
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
-                Integer.parseInt(request.getParameter("calories")));
+                Integer.parseInt(request.getParameter("calories")),
+                Integer.parseInt(request.getParameter("userId")));
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
         if (meal.isNew())
@@ -82,10 +84,10 @@ public class MealServlet extends HttpServlet {
                 String startTimeParam = request.getParameter("startTime");
                 String endTimeParam = request.getParameter("endTime");
 
-                LocalDate startDate = startDateParam != null && !startDateParam.isEmpty() ? LocalDate.parse(startDateParam) : null;
-                LocalDate endDate = endDateParam != null && !endDateParam.isEmpty() ? LocalDate.parse(endDateParam) : null;
-                LocalTime startTime = startTimeParam != null && !startTimeParam.isEmpty() ? LocalTime.parse(startTimeParam) : null;
-                LocalTime endTime = endTimeParam != null && !endTimeParam.isEmpty() ? LocalTime.parse(endTimeParam) : null;
+                LocalDate startDate = StringUtils.hasText(startDateParam) ? LocalDate.parse(startDateParam) : null;
+                LocalDate endDate = StringUtils.hasText(endDateParam) ? LocalDate.parse(endDateParam) : null;
+                LocalTime startTime = StringUtils.hasText(startTimeParam) ? LocalTime.parse(startTimeParam) : null;
+                LocalTime endTime = StringUtils.hasText(endTimeParam) ? LocalTime.parse(endTimeParam) : null;
 
                 if (startDate != null || endDate != null || startTime != null || endTime != null) {
                     request.setAttribute("meals", controller.getFilteredMealsByDateRange(startDate, endDate, startTime, endTime));
