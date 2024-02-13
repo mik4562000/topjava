@@ -7,10 +7,11 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
-import static ru.javawebinar.topjava.web.SecurityUtil.authUserCaloriesPerDay;
 
 @Service
 public class MealService {
@@ -22,20 +23,31 @@ public class MealService {
         this.repository = repository;
     }
 
-    public Meal save(int userId, Meal meal) {
+    public Meal create(int userId, Meal meal) {
         return repository.save(userId, meal);
     }
 
-    public boolean delete(int userId, int id) {
-        return repository.delete(userId, id);
+    public void update(int userId, Meal meal, int id) {
+        checkNotFoundWithId(repository.save(userId, meal), id);
+    }
+
+    public void delete(int userId, int id) {
+        checkNotFoundWithId(repository.delete(userId, id), id);
     }
 
     public Meal get(int userId, int id) {
         return checkNotFoundWithId(repository.get(userId, id), id);
     }
 
-    public List<MealTo> getAll(int userId) {
-        return MealsUtil.getTos(repository.getAll(userId), authUserCaloriesPerDay());
+    public List<MealTo> getAll(int userId, int authUserCaloriesPerDay) {
+        return MealsUtil.getTos(repository.getAll(userId), authUserCaloriesPerDay);
     }
 
+    public List<MealTo> getFilteredMealsByDateRange(int userId, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime, int authUserCaloriesPerDay) {
+        LocalDate startDateNotNull = startDate == null || startDate.equals("") ? LocalDate.MIN : startDate;
+        LocalDate endDateNotNull = endDate == null || endDate.equals("") ? LocalDate.MAX : endDate;
+        LocalTime startTimeNotNull = startTime == null || startTime.equals("") ? LocalTime.MIN : startTime;
+        LocalTime endTimeNotNull = endTime == null || endTime.equals("") ? LocalTime.MAX : endTime;
+        return MealsUtil.getTos(repository.getFilteredMealsByDateRange(userId, startDateNotNull, endDateNotNull, startTimeNotNull, endTimeNotNull), authUserCaloriesPerDay);
+    }
 }
