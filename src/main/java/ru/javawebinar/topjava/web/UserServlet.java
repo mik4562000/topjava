@@ -26,7 +26,7 @@ public class UserServlet extends HttpServlet {
         if (StringUtils.hasText(userIdParam)) {
             int userId = Integer.parseInt(userIdParam);
             SecurityUtil.setAuthUserId(userId);
-            response.sendRedirect("index.html");
+            response.sendRedirect("meals");
         } else {
             response.getWriter().println("Invalid user ID");
         }
