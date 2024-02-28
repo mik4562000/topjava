@@ -1,7 +1,13 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,6 +19,9 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -27,8 +36,43 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+
+    private static Map<String, Long> testTimes = new HashMap<>();
+
     @Autowired
     private MealService service;
+
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void succeeded(long nanos, Description description) {
+            log.info("{} succeeded in {} ms", description.getMethodName(), toMillis(nanos));
+            recordTestTime(description.getMethodName(), nanos);
+        }
+
+        @Override
+        protected void failed(long nanos, Throwable e, Description description) {
+            log.info("{} failed in {} ms", description.getMethodName(), toMillis(nanos));
+            recordTestTime(description.getMethodName(), nanos);
+        }
+
+        private void recordTestTime(String methodName, long nanos) {
+            testTimes.put(methodName, toMillis(nanos));
+        }
+
+        private Long toMillis(long nanos) {
+            return TimeUnit.NANOSECONDS.toMillis(nanos);
+        }
+    };
+
+    @AfterClass
+    public static void printSummary() {
+        log.info("Test summary for MealServiceTest:");
+        for (Map.Entry<String, Long> entry : testTimes.entrySet()) {
+            log.info("{} - {} ms", entry.getKey(), entry.getValue());
+        }
+    }
 
     @Test
     public void delete() {
