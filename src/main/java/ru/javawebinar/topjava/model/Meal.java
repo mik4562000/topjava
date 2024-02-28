@@ -1,8 +1,7 @@
 package ru.javawebinar.topjava.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -14,7 +13,7 @@ import java.time.LocalTime;
 })
 @Entity
 @Table(name = "meal", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"date_time", "user_id"})
+        @UniqueConstraint(columnNames = {"user_id", "date_time"})
 })
 public class Meal extends AbstractBaseEntity {
     public static final String DELETE = "Meal.delete";
@@ -22,18 +21,22 @@ public class Meal extends AbstractBaseEntity {
     public static final String ALL_SORTED = "Meal.getAllSorted";
 
     @Column(name = "date_time", nullable = false)
+    @NotNull(message = "DateTime must not be null")
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
     @NotBlank(message = "Description must not be blank")
+    @Size(min = 2, max = 120)
     private String description;
 
     @Column(name = "calories")
-    @Positive(message = "Calories must be greater than zero")
+    @Min(value = 10, message = "Calories must be between 10 and 5000")
+    @Max(value = 5000, message = "Calories must be between 10 and 5000")
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id", nullable = false)
+    @NotNull(message = "User must not be null")
     private User user;
 
     public Meal() {
