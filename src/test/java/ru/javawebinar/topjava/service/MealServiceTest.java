@@ -45,15 +45,10 @@ public class MealServiceTest {
 
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
-        @Override
-        protected void succeeded(long nanos, Description description) {
-            log.info("{} succeeded in {} ms", description.getMethodName(), toMillis(nanos));
-            recordTestTime(description.getMethodName(), nanos);
-        }
 
         @Override
-        protected void failed(long nanos, Throwable e, Description description) {
-            log.info("{} failed in {} ms", description.getMethodName(), toMillis(nanos));
+        protected void finished(long nanos, Description description) {
+            log.info("{} finished in {} ms", description.getMethodName(), toMillis(nanos));
             recordTestTime(description.getMethodName(), nanos);
         }
 
@@ -68,10 +63,11 @@ public class MealServiceTest {
 
     @AfterClass
     public static void printSummary() {
-        log.info("Test summary for MealServiceTest:");
-        for (Map.Entry<String, Long> entry : testTimes.entrySet()) {
-            log.info("{} - {} ms", entry.getKey(), entry.getValue());
-        }
+        StringBuilder summary = new StringBuilder("Test summary for MealServiceTest:\n");
+        testTimes.entrySet().stream()
+                .forEach(entry -> summary.append(String.format("%-30s %d ms%n", entry.getKey(), entry.getValue())));
+
+        log.info(summary.toString());
     }
 
     @Test
