@@ -64,9 +64,7 @@ public class MealServiceTest {
     @AfterClass
     public static void printSummary() {
         StringBuilder summary = new StringBuilder("Test summary for MealServiceTest:\n");
-        testTimes.entrySet().stream()
-                .forEach(entry -> summary.append(String.format("%-30s %d ms%n", entry.getKey(), entry.getValue())));
-
+        testTimes.forEach((key, value) -> summary.append(String.format("%-30s %d ms%n", key, value)));
         log.info(summary.toString());
     }
 
