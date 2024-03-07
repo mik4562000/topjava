@@ -25,7 +25,9 @@
 <!--    <logger name="org.springframework.jdbc" level="info"/>-->
     <logger name="ru.javawebinar.topjava" level="debug"/>
 
-    <root level="INFO">
+    <logger name="org.springframework.orm.jpa" level="debug"/>
+
+    <root level="DEBUG">
         <appender-ref ref="console"/>
     </root>
 
