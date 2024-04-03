@@ -3,7 +3,7 @@ const userAjaxUrl = "admin/users/";
 // https://stackoverflow.com/a/5064235/548473
 const ctx = {
     ajaxUrl: userAjaxUrl,
-    filterAjaxUrl: userAjaxUrl
+    updateAjaxUrl: userAjaxUrl
 };
 
 // $(document).ready(function () {

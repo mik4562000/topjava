@@ -3,7 +3,7 @@ const filterAjaxUrl = "meals/filter/";
 
 const ctx = {
     ajaxUrl: mealAjaxUrl,
-    filterAjaxUrl: filterAjaxUrl
+    updateAjaxUrl: filterAjaxUrl
 };
 
 $(function () {
@@ -33,9 +33,28 @@ $(function () {
             "order": [
                 [
                     0,
-                    "asc"
+                    "desc"
                 ]
             ]
         })
     );
 });
+
+function resetFilter() {
+    let filterForm = $('#filterForm');
+    filterForm.trigger("reset");
+    updateTable();
+}
+
+function filter() {
+    let filterForm = $('#filterForm');
+    $.ajax({
+        type: 'GET',
+        url: ctx.updateAjaxUrl,
+        data: filterForm.serialize()
+    }).done(function (response) {
+        ctx.datatableApi.clear().rows.add(response).draw();
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        console.error("AJAX error: " + textStatus, errorThrown);
+    });
+}

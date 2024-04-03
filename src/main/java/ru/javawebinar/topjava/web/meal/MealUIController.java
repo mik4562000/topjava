@@ -1,7 +1,9 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +28,11 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 @RequestMapping(value = "/meals", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MealUIController extends AbstractMealController {
 
-    @Override
+    /*@Override
     @GetMapping("/filter")
     public List<MealTo> getAll() {
         return super.getAll();
-    }
+    }*/
 
     @Override
     @DeleteMapping("/{id}")
@@ -39,15 +41,21 @@ public class MealUIController extends AbstractMealController {
         super.delete(id);
     }
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void create(@RequestParam String dateTime,
+    public void create(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                        @RequestParam String description,
-                       @RequestParam String calories) {
-        String dateString = dateTime;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        LocalDateTime dateTime_ = LocalDateTime.parse(dateString, formatter);
-        super.create(new Meal(null, dateTime_, description, Integer.parseInt(calories)));
+                       @RequestParam int calories) {
+        super.create(new Meal(null, dateTime, description, calories));
+    }
+
+    @Override
+    @GetMapping("/filter")
+    public List<MealTo> getBetween(
+            @RequestParam @Nullable LocalDate startDate,
+            @RequestParam @Nullable LocalTime startTime,
+            @RequestParam @Nullable LocalDate endDate,
+            @RequestParam @Nullable LocalTime endTime) {
+        return super.getBetween(startDate, startTime, endDate, endTime);
     }
 }
