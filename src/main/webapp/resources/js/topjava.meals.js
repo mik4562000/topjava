@@ -1,5 +1,6 @@
 const mealAjaxUrl = "meals/";
 const filterAjaxUrl = "meals/filter/";
+let filterForm;
 
 const ctx = {
     ajaxUrl: mealAjaxUrl,
@@ -38,16 +39,15 @@ $(function () {
             ]
         })
     );
+    filterForm = $('#filterForm');
 });
 
 function resetFilter() {
-    let filterForm = $('#filterForm');
     filterForm.trigger("reset");
     updateTable();
 }
 
 function filter() {
-    let filterForm = $('#filterForm');
     $.ajax({
         type: 'GET',
         url: ctx.updateAjaxUrl,

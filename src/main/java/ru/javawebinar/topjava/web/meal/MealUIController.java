@@ -28,12 +28,6 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 @RequestMapping(value = "/meals", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MealUIController extends AbstractMealController {
 
-    /*@Override
-    @GetMapping("/filter")
-    public List<MealTo> getAll() {
-        return super.getAll();
-    }*/
-
     @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
